@@ -1,4 +1,4 @@
-{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, rarian
+{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, rarian, openssl_1_0_2
 , libstartup_notification, overrides ? {} }:
 
 let overridden = set // overrides; set = with overridden; {
@@ -49,7 +49,9 @@ let overridden = set // overrides; set = with overridden; {
   gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
   python_rsvg = overridden.gnome_python_desktop;
 
-  gnome_vfs = callPackage ./platform/gnome-vfs { };
+  gnome_vfs = callPackage ./platform/gnome-vfs {
+    openssl = openssl_1_0_2;
+  };
 
   libgnome = callPackage ./platform/libgnome { };
 
