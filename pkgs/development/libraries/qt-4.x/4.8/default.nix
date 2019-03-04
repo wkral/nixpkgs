@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, substituteAll
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLSupported, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLSupported, libGLU, openssl_1_0_2, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     "-v" "-no-separate-debug-info" "-release" "-fast" "-confirm-license" "-opensource"
 
     (mk (!stdenv.isFreeBSD) "opengl") "-xrender" "-xrandr" "-xinerama" "-xcursor" "-xinput" "-xfixes" "-fontconfig"
-    "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl-linked"
+    "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl_1_0_2-linked"
 
     "-${if mysql != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
 
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
-      libSM zlib libpng openssl dbus freetype fontconfig glib ]
+      libSM zlib libpng openssl_1_0_2 dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ lib.optional libGLSupported libGLU
     ++ lib.optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
